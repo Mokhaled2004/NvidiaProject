@@ -1,0 +1,28 @@
+# Backend Core
+fastapi
+uvicorn[standard]
+python-dotenv
+python-multipart
+
+# LangChain Orchestration
+langchain
+langchain-community
+langchain-core
+langserve[all]
+langchain-google-genai
+langchain-ollama
+langchain-chroma
+
+# Vector Store
+chromadb
+
+# Document Parsing
+pymupdf
+pdfplumber
+python-docx
+pypdf
+
+# Embeddings & Utilities
+sentence-transformers
+pydantic
+requests
