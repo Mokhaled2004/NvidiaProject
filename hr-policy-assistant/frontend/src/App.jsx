@@ -14,7 +14,7 @@ const App = () => {
     {
       role: "assistant",
       content:
-        "Hello! I am ready to analyze your HR documents. Please upload a handbook or ask a specific policy question.",
+        "Hello! I am AskMeAPolicy,ready to analyze your HR documents. Please upload a handbook and ask a specific policy question.",
     },
   ]);
 

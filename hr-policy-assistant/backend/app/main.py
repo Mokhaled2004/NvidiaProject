@@ -1,18 +1,17 @@
 import os
 import sys
+import uvicorn
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-
-# Ensure the parent directory is in sys.path so app.core can be found
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-# IMPORT: We now need to import 'clear_history' if you choose to export it, 
-# or we can just access it via the core retrieval module.
 from app.core.retrieval import query_documents
+
+# Setup pathing for local module imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 app = FastAPI(title="HR Policy Assistant")
 
+# Enable cross-origin requests for frontend access
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -20,7 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Robust pathing: Points to backend/app/data
+# Initialize data directory for PDF storage
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 os.makedirs(DATA_DIR, exist_ok=True)
@@ -30,6 +29,7 @@ class ChatRequest(BaseModel):
 
 @app.post('/upload')
 async def upload_pdf(file: UploadFile = File(...)):
+    # Validate and save uploaded PDF to the data directory
     if not file.filename.endswith('.pdf'):
         raise HTTPException(status_code=400, detail="Only PDF files are supported.")
     
@@ -40,28 +40,26 @@ async def upload_pdf(file: UploadFile = File(...)):
         with open(file_path, "wb") as f:
             f.write(content)
         
-        # Process and index
+        # Trigger document processing and indexing
         from app.core.ingestion import process_document 
         status = process_document(file_path)
         return {"message": f"File '{file.filename}' indexed.", "details": status}
     except Exception as e:
-        print(f"UPLOAD ERROR: {e}") 
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post('/ask')
 def ask_hr(request: ChatRequest):
+    # Query the RAG system with context-aware history
     try:
-        # This now uses the 'chat_history' state in retrieval.py
         answer = query_documents(request.question)
         return {"answer": answer}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# NEW: Endpoint to clear memory (Running State)
 @app.post('/reset')
 def reset_chat():
+    # Wipe the existing conversation history from memory
     try:
-        # We reach into the retrieval module to clear the global list
         from app.core import retrieval
         retrieval.chat_history = []
         return {"message": "Chat history cleared successfully."}
@@ -69,5 +67,4 @@ def reset_chat():
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

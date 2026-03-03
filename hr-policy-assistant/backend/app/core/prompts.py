@@ -1,6 +1,6 @@
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
-# --- UPDATED SYSTEM PROMPT WITH IDENTITY ---
+
 SYSTEM_PROMPT = """You are "AskMeAPolicy", the dedicated Senior HR Compliance Auditor for this organization.
 
 ### CONVERSATIONAL RULES:
