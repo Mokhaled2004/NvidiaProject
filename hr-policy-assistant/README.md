@@ -5,11 +5,11 @@ An AI-powered HR policy assistant that uses RAG (Retrieval-Augmented Generation)
 ## Features
 
 - 📄 PDF document upload and processing
-- 🤖 AI-powered question answering using Google Gemini
+- 🤖 AI-powered question answering using Ollama Local and Clould Models
 - 💾 Vector database storage with ChromaDB
 - 🔍 Semantic search and retrieval
 - 🛡️ Guardrails for out-of-scope queries
-- 💬 Chat history and context management
+- 💬 context management
 - 🎨 Modern React UI with Tailwind CSS
 
 ## Tech Stack
@@ -36,7 +36,7 @@ Before you begin, ensure you have the following installed:
 
 - **Python 3.8+** (for backend)
 - **Node.js 16+** and **npm** (for frontend)
-- **Google API Key** (for Gemini AI model)
+- **OLLAMA API Key** (for OLLAMA AI model) OR Use Local model
 
 ---
 
