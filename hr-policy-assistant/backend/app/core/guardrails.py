@@ -5,8 +5,9 @@ class SemanticGuardrail:
         self.embeddings = embeddings
         # Define topics that are strictly off-limits for the HR Assistant
         self.banned_topics = [
-            "how to cook", "medical advice", "weather", "gaming", 
-            "programming code", "jokes", "politics", "religion"
+            "how to cook", "food and recipes", "medical advice", "weather", 
+            "gaming", "programming code", "jokes", "politics", "religion",
+            "creative writing", "general knowledge", "storytelling"
         ]
         # Pre-calculate embeddings for banned topics to save processing time
         self.banned_embeddings = [self.embeddings.embed_query(t) for t in self.banned_topics]
